@@ -89,6 +89,11 @@ a {
   border-radius: var(--border-radius);
   padding: 1rem;
   overflow: hidden;
+  transition: height var(--speed) ease;
+}
+
+.menu {
+  width: 100%;
 }
 
 .menu-item {
@@ -100,6 +105,10 @@ a {
   padding: 0.5rem;
 }
 
+.menu-item .icon-button:hover {
+  filter: none;
+}
+
 .menu-item:hover {
   background: #525357;
 }
@@ -108,7 +117,7 @@ a {
   margin-left: auto;
 }
 
-.mennu-primary-enter {
+.menu-primary-enter {
   position: absolute;
   transform: translateX(-110%);
 }
@@ -124,8 +133,7 @@ a {
   transform: translateX(-110%);
 }
 
-.mennu-secondary-enter {
-  position: absolute;
+.menu-secondary-enter {
   transform: translateX(110%);
 }
 
@@ -133,9 +141,7 @@ a {
   transform: translateX(0%);
   transition: all var(--speed) ease;
 }
-.menu-seconndary-exit {
-  position: absolute;
-}
+
 .menu-secondary-exit-active {
   transform: translateX(110%);
   transition: all var(--speed) ease;
