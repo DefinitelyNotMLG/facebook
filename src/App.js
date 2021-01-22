@@ -1,4 +1,4 @@
-import React, { useState }from 'react';
+import React, { useState ,useEffect, useRef }from 'react';
 import './index.css';
 import {ReactComponent as BellIcon} from './icons/bell.svg';
 import {ReactComponent as ArrowIcon} from './icons/arrow.svg';
@@ -10,38 +10,53 @@ import {ReactComponent as MessengerIcon} from './icons/messenger.svg';
 import {ReactComponent as PlusIcon} from './icons/plus.svg';
 import {CSSTransition} from 'react-transition-group';
 
-{/*   
-      <NavItem icon={<ArrowIcon/>}/>
-      <NavItem icon={<BoltIcon/>}/>
-      <NavItem icon={<ChrevronIcon/>}/>
-      <NavItem icon={<CogIcon/>}/>
-      
-       */}
-
-
-
 function App() {
   return (
-    <Navbar>
+  <Navbar>
      <NavItem icon={<PlusIcon/>}/> 
      <NavItem icon={<BellIcon />}/>
-     <NavItem icon={<MessengerIcon/>}/>
-    
-    <NavItem icon={<CaretIcon/>}>
-    <DropdownMenu/>
-
-
+     <NavItem icon={<MessengerIcon/>} />
+     
+     <NavItem icon={<CaretIcon/>}>
+     <DropdownMenu></DropdownMenu>
     </NavItem>
-
-
-
-    </Navbar>
+   </Navbar>
   );
 }
+
+function Navbar(props) {
+  return (
+    <nav className="navbar">
+      <ul className='navbar-nav'>{ props.children }</ul>
+    </nav>
+  );
+}
+
+function NavItem(props) {
+
+  const [open, setOpen] = useState(false);
+  
+    return (
+      <li className='nav-item'>
+        <a href='#' className='icon-button' onClick={() => setOpen(!open)}>
+          {props.icon}
+        </a>
+        {open && props.children}
+      </li>
+    )
+  }
+  
 
 function DropdownMenu() {
 
   const [activeMenu, setActiveMenu] = useState('main');
+  const [menuHeight, setMenuHeight] =useState(null);
+  const dropdownRef = useRef(null);
+
+  function calcHeight(el) {
+    const height = el.offsetHeight;
+    setMenuHeight(height);
+  }
 
 function DropdownItem(props) {
   return(
@@ -54,11 +69,13 @@ function DropdownItem(props) {
 }
 
 return (
-<div className='dropdown'>
+<div className='dropdown' style={{ height: menuHeight}} ref={dropdownRef}>
   
   
-  <CSSTransition in={activeMenu === 'main'} 
-  unnmountOnExit timeout={500} className='menu-primary'>
+  <CSSTransition 
+  in={activeMenu === 'main'} 
+  unnmountOnExit timeout={500} className='menu-primary'
+  onEnter={calcHeight}>
   
   <div className='menu'>
   <DropdownItem>My Profile</DropdownItem>
@@ -68,47 +85,20 @@ return (
   goToMenu="settings">
     Settings
   </DropdownItem>
+  <DropdownItem 
+  leftIcon={<ArrowIcon/>} 
+  iconRight={<ChrevronIcon>}
+  goToMenu='animals'>
+  Animals
+  </DropdownItem>
   </div>
-  </CSSTransition>
+</CSSTransition>
 
-  <CSSTransition in={activeMenu === 'settings'} 
-  unnmountOnExit timeout={500} className='menu-secondary'>
-  
-  <div className='menu'>
-  <DropdownItem leftIcon={<ArrowIcon/>} goToMenu="main"/>
-  <DropdownItem>Settings</DropdownItem>
-  </div>
-  </CSSTransition>
-  
-</div>
+
 );
-
-
-
-}
-
-
-function Navbar(props) {
-  return (
-    <nav className="navbar">
-      <ul className='navbar-nav'>
-        { props.children }
-      </ul>
-    </nav>
-  );
-}
-
-function NavItem(props) {
-
-const [open, setOpen] = useState(false);
-
-  return (
-    <li className='nav-item'>
-      <a href='#' className='icon-button' onClick={() => setOpen(!open)}>
-        {props.icon}
-      </a>
-      {open && props.children}
-    </li>
-  )
 }
 export default App;
+
+
+
+
